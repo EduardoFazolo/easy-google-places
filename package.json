@@ -1,0 +1,12 @@
+{
+  "name": "easy-google-restaurants",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "^1.3.6"
+  },
+  "peerDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
