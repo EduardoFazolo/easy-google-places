@@ -1,3 +1,5 @@
-export { generateSubCircles, type Coordinate } from "./geometry";
-export { fetchPlaceFromApi, type PlaceResult } from "./api";
+export { generateSubCircles } from "./geometry";
+export { fetchPlaceFromApi } from "./api";
 export { PlaceQueryBuilder, getGooglePlaces } from "./core";
+export { Coordinate, PlaceResult } from "./types";
+

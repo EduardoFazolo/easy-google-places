@@ -1,22 +1,4 @@
-import { Coordinate } from "./geometry";
-
-// Define simplified interface for the result based on the user's snippet
-export interface PlaceResult {
-  place_id?: string;
-  name?: string;
-  formatted_address?: string;
-  geometry?: {
-    location: {
-      lat: number;
-      lng: number;
-    };
-  };
-  types?: string[];
-  rating?: number;
-  user_ratings_total?: number;
-  business_status?: string;
-  [key: string]: any;
-}
+import { Coordinate, PlaceResult } from "./types";
 
 export async function fetchPlaceFromApi(
   location: Coordinate,

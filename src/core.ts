@@ -1,6 +1,7 @@
-import { Coordinate, generateSubCircles } from "./geometry";
-import { fetchPlaceFromApi, PlaceResult } from "./api";
-import { appendFileSync, writeFileSync } from "fs";
+import { generateSubCircles } from "./geometry";
+import { fetchPlaceFromApi } from "./api";
+import { writeFileSync } from "fs";
+import { Coordinate, PlaceResult } from "./types";
 
 type OutputFormat = "csv" | "json" | ((places: PlaceResult[]) => void);
 
@@ -169,8 +170,8 @@ export class PlaceQueryBuilder {
                     p.rating || "",
                     p.user_ratings_total || "",
                     p.place_id,
-                    p.geometry?.location.lat || "",
-                    p.geometry?.location.lng || ""
+                    p.geometry?.location?.lat || "",
+                    p.geometry?.location?.lng || ""
                 ].join(",")
             })
         ].join("\n");
@@ -180,6 +181,13 @@ export class PlaceQueryBuilder {
   }
 }
 
+/**
+ * 
+ * @param location {latitude: number, longitude: number}
+ * @returns PlaceQueryBuilder
+ * 
+ * @version 1.0.4
+ */
 export function getGooglePlaces(location: Coordinate) {
   return new PlaceQueryBuilder(location);
 }

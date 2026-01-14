@@ -1,10 +1,5 @@
-/**
- * Represents a geographic coordinate.
- */
-export interface Coordinate {
-  latitude: number;
-  longitude: number;
-}
+import { Coordinate } from "./types";
+
 
 /**
  * Generates a list of coordinates for sub-circles that cover a larger circle.
