@@ -62,10 +62,15 @@ export async function fetchPlaceFromApi(
       }
 
       if (data.results) {
-        const activePlaces = (data.results as PlaceResult[]).filter(
-            (place) => place.business_status !== "CLOSED_TEMPORARILY"
-        );
-        allPlaces.push(...activePlaces);
+        let activePlaces: PlaceResult[] = [];
+        if (!allowClosedStores) {
+            activePlaces = (data.results as PlaceResult[]).filter(
+                (place) => place.business_status !== "CLOSED_TEMPORARILY"
+            );
+            allPlaces.push(...activePlaces);
+        } else {
+            allPlaces.push(...data.results as PlaceResult[]);
+        }
         if (onProgress) {
             onProgress(activePlaces.length);
         }
