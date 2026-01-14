@@ -1,6 +1,6 @@
 {
   "name": "easy-google-restaurants",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Query Google Places API with automatic area subdivision to maximize results.",
   "main": "dist/index.js",
   "module": "dist/index.js",

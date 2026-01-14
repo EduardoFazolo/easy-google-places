@@ -231,7 +231,7 @@ export class PlaceQueryBuilder {
  * @param location {latitude: number, longitude: number}
  * @returns PlaceQueryBuilder
  * 
- * @version 1.0.4
+ * @version 1.0.8
  */
 export function getGooglePlaces(location: Coordinate) {
   return new PlaceQueryBuilder(location);
