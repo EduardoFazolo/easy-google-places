@@ -1,12 +1,34 @@
 {
   "name": "easy-google-restaurants",
-  "module": "index.ts",
+  "version": "1.0.0",
+  "description": "Query Google Places API with automatic area subdivision to maximize results.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "type": "module",
-  "private": true,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "bun build ./src/index.ts --outdir ./dist --target node --sourcemap=external && tsc --emitDeclarationOnly --outDir dist",
+    "test": "bun test",
+    "prepublishOnly": "bun run build"
+  },
+  "keywords": [
+    "google-places",
+    "google-maps",
+    "places-api",
+    "restaurants",
+    "subdivision",
+    "scraper",
+    "typescript"
+  ],
+  "author": "Eduardo Fazolo",
+  "license": "MIT",
   "devDependencies": {
     "@types/bun": "^1.3.6"
   },
   "peerDependencies": {
-    "typescript": "^5.9.3"
-  }
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {}
 }
