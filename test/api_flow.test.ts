@@ -14,8 +14,9 @@ describe("PlaceQueryBuilder Integration", () => {
 
   test("runs full flow with mocked responses", async () => {
     const mockResults = [
-      { place_id: "p1", name: "Place 1", geometry: { location: { lat: 1, lng: 1 } } },
-      { place_id: "p2", name: "Place 2", geometry: { location: { lat: 2, lng: 2 } } }
+      { place_id: "p1", name: "Place 1", business_status: "OPERATIONAL", geometry: { location: { lat: 1, lng: 1 } } },
+      { place_id: "p2", name: "Place 2", business_status: "OPERATIONAL", geometry: { location: { lat: 2, lng: 2 } } },
+      { place_id: "p3", name: "Place 3", business_status: "CLOSED_TEMPORARILY", geometry: { location: { lat: 3, lng: 3 } } }
     ];
 
     // Mock fetch

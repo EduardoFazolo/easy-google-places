@@ -13,6 +13,7 @@ export class PlaceQueryBuilder {
   private _showLogs: boolean = false;
   private _showProgress: boolean = false;
   private _apiKey: string | undefined;
+  private _forceQueryClosedStores: boolean = false;
 
   constructor(location: Coordinate) {
     this._location = location;
@@ -73,6 +74,15 @@ export class PlaceQueryBuilder {
   }
 
   /**
+   * By default, this library filters out the TEMPORARILY_CLOSED stores.
+   * Use this method to allow them to be included in the results.
+   */
+  public allowClosedStores(): this {
+    this._forceQueryClosedStores = true;
+    return this;
+  }
+
+  /**
    * Executes the query process.
    */
   public async run(): Promise<void> {
@@ -113,7 +123,8 @@ export class PlaceQueryBuilder {
         this._apiKey,
         (count) => {
              // Optional: finer progress update
-        }
+        },
+        this._forceQueryClosedStores
       );
 
       for (const place of places) {

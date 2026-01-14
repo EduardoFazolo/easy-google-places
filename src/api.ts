@@ -14,6 +14,7 @@ export interface PlaceResult {
   types?: string[];
   rating?: number;
   user_ratings_total?: number;
+  business_status?: string;
   [key: string]: any;
 }
 
@@ -22,7 +23,8 @@ export async function fetchPlaceFromApi(
   radius: number,
   type: string,
   apiKey: string,
-  onProgress?: (count: number) => void
+  onProgress?: (count: number) => void,
+  allowClosedStores: boolean = false,
 ): Promise<PlaceResult[]> {
   const allPlaces: PlaceResult[] = [];
   const maxPages = 3;
@@ -60,9 +62,12 @@ export async function fetchPlaceFromApi(
       }
 
       if (data.results) {
-        allPlaces.push(...(data.results as PlaceResult[]));
+        const activePlaces = (data.results as PlaceResult[]).filter(
+            (place) => place.business_status !== "CLOSED_TEMPORARILY"
+        );
+        allPlaces.push(...activePlaces);
         if (onProgress) {
-            onProgress(data.results.length);
+            onProgress(activePlaces.length);
         }
       }
 
