@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { generateSubCircles, Coordinate } from "../src/geometry";
+import { generateSubCircles } from "../src/geometry";
+import { Coordinate } from "../src/types";
 
 describe("generateSubCircles", () => {
   test("returns single center if radius <= subRadius", () => {

@@ -9,6 +9,8 @@ export class PlaceQueryBuilder {
   private _location: Coordinate;
   private _radius: number = 4000; // Default 4km
   private _subRadius: number = 500; // Default 500m
+  private _minRate: number = 4.1;
+  private _limitCount: number | undefined;
   private _type: string = "restaurant";
   private _onFinished?: OutputFormat;
   private _showLogs: boolean = false;
@@ -37,6 +39,25 @@ export class PlaceQueryBuilder {
    */
   public radius(radius: number): this {
     this._radius = radius;
+    return this;
+  }
+
+  /**
+   * Sets the minimum rating to filter results (default 4.1).
+   * @param rate Minimum rating.
+   */
+  public minRate(rate: number): this {
+    this._minRate = rate;
+    return this;
+  }
+
+  /**
+   * Limits the number of results and optimizes the query by reducing the number of sub-circles searched.
+   * Optimization assumption: ~60 results per sub-circle.
+   * @param max Max number of places to return.
+   */
+  public limit(max: number): this {
+    this._limitCount = max;
     return this;
   }
 
@@ -99,7 +120,23 @@ export class PlaceQueryBuilder {
     if (this._showLogs) console.log(`Radius: ${this._radius}m, Sub-radius: ${this._subRadius}m`);
 
     // 1. Generate sub-circles
-    const subCircles = generateSubCircles(this._location, this._radius, this._subRadius);
+    let subCircles = generateSubCircles(this._location, this._radius, this._subRadius);
+    
+    // Optimization: If limit is set, reduce the number of batches
+    if (this._limitCount) {
+      const maxBatches = Math.ceil(this._limitCount / 60);
+      if (subCircles.length > maxBatches) {
+        // Shuffle array to get random circles
+        for (let i = subCircles.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [subCircles[i], subCircles[j]] = [subCircles[j], subCircles[i]];
+        }
+        // Slice to the max needed matches
+        subCircles = subCircles.slice(0, maxBatches);
+        if (this._showLogs) console.log(`Optimization: Limiting to ${maxBatches} batches based on limit of ${this._limitCount}`);
+      }
+    }
+
     const totalBatches = subCircles.length;
 
     if (this._showLogs) console.log(`Generated ${totalBatches} sub-circles for searching.`);
@@ -145,7 +182,15 @@ export class PlaceQueryBuilder {
       await new Promise(r => setTimeout(r, 200)); 
     }
 
-    const uniquePlaces = Array.from(allPlacesMap.values());
+    let uniquePlaces = Array.from(allPlacesMap.values());
+    
+    // Filter by minRate
+    uniquePlaces = uniquePlaces.filter(p => (p.rating || 0) >= this._minRate);
+
+    // Apply limit
+    if (this._limitCount && uniquePlaces.length > this._limitCount) {
+      uniquePlaces = uniquePlaces.slice(0, this._limitCount);
+    }
     if (this._showLogs) console.log(`Finished! Found ${uniquePlaces.length} unique places.`);
 
     // 3. Handle output
