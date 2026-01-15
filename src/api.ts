@@ -22,9 +22,12 @@ export async function fetchPlaceFromApi(
   url.searchParams.append("key", apiKey);
 
   let nextPageToken: string | undefined = undefined;
-  let pageCount = 0;
 
-  do {
+  for (let i = 0; i < maxPages; i++) {
+    if (i > 0 && !nextPageToken) {
+      break;
+    }
+
     const currentUrl = new URL(url.toString());
     if (nextPageToken) {
       currentUrl.searchParams.append("pagetoken", nextPageToken);
@@ -44,27 +47,29 @@ export async function fetchPlaceFromApi(
       }
 
       if (data.results) {
+        // console.log("\n\n\n", JSON.stringify(data.results))
         let activePlaces: PlaceResult[] = [];
         if (!allowClosedStores) {
-            activePlaces = (data.results as PlaceResult[]).filter(
-                (place) => place.business_status !== "CLOSED_TEMPORARILY"
-            );
-            allPlaces.push(...activePlaces);
+          activePlaces = (data.results as PlaceResult[]).filter(
+            (place) => place.business_status !== "CLOSED_TEMPORARILY"
+          );
         } else {
-            allPlaces.push(...data.results as PlaceResult[]);
+          activePlaces = data.results as PlaceResult[];
         }
+        
+        allPlaces.push(...activePlaces);
+
         if (onProgress) {
-            onProgress(activePlaces.length);
+          onProgress(activePlaces.length);
         }
       }
 
       nextPageToken = data.next_page_token;
-      pageCount++;
     } catch (error) {
       console.error("Network error fetching places:", error);
       break;
     }
-  } while (nextPageToken && pageCount < maxPages);
+  }
 
   return allPlaces;
 }

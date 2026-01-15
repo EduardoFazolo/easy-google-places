@@ -87,19 +87,59 @@ Creates `places_output.json` containing an array of place objects:
 ```json
 [
   {
-    "place_id": "ChIJ...",
-    "name": "Le Example Bistro",
-    "formatted_address": "123 Rue de Example, Paris",
-    "geometry": {
-      "location": {
-        "lat": 48.85,
-        "lng": 2.35
+    "business_status":"OPERATIONAL",
+    "geometry":{
+      "location":{
+          "lat":48.86455669999999,
+          "lng":2.3730067
+      },
+      "viewport":{
+          "northeast":{
+            "lat":48.8658997302915,
+            "lng":2.374421130291502
+          },
+          "southwest":{
+            "lat":48.8632017697085,
+            "lng":2.371723169708498
+          }
       }
     },
-    "types": ["restaurant", "food", "point_of_interest"],
-    "rating": 4.5,
-    "user_ratings_total": 120,
-    "business_status": "OPERATIONAL"
+    "icon":"https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+    "icon_background_color":"#FF9E67",
+    "icon_mask_base_uri":"https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+    "international_phone_number":"+33 1 47 00 61 73",
+    "name":"Ave Maria (ce restaurant n'est pas un restaurant Brésilien, même si nous faisons de la caipi)",
+    "opening_hours":{
+      "open_now":true
+    },
+    "photos":[
+      {
+          "height":4032,
+          "html_attributions":[
+            "<a href=\"https://maps.google.com/maps/contrib/111679119907463921442\">Johnny Højer Johansen</a>"
+          ],
+          "photo_reference":"AcnlKN1mAFiMl0uJqOk2mvJIgVYd-hUpCeWbBWMLF_c199JF6iZv7pbx0XNx8fUjFBD8sHqpIyeyJ5wzcj9_c_6JK3aDSxEw6unaD_6-k8RM5fw0as-vDN6l6AgjnzuKsA6bC1_bsFApbqq2s1PIZgmXkKrjK32aZt-uRki-ESkkLKfuIYUQe_TL7OTeh-rxOz92YeZWL6H-_F5N5fraJSHCl7UpJmTpnod2SgKFwSvUG1qH5zSHqGwL2knEkdWfuQR-lWrlYTCPtC3zgqyd7_KsPdkZPoSuDuW0KqH4H_ksgsu6XEaHFqRCR_SJXa_pC-bXdDNqbr4V1aeG33x2EwoNDQF9gYuEWryPm5ro5oN9cYwEnmlObfokk4RyGFlxueWxLhoudTJsdYq-lusL8tBup2ochGqiY_0jllUTgGkC_20jdcjRtr-GSDOfpajTo-VGMjVq0uWipXBS9cnvOTooQ_sbSvEokDHHhDRjgN3B4JRnZTL2FwdrI3bDamnxaVw4nOUuNBPdqFx9FQE3fEZWhrvyfCMP9-xUnFQhz1xgUJVJCi1UU9Bt3_wU1ntLTraHwrKXzJH_bkE5fbGiohycEC24DoJukmE1poW9NJMP786yDWeSEuVgEoMoToRXwnrm8lS5fQ",
+          "width":3024
+      }
+    ],
+    "place_id":"ChIJr21RoPxt5kcRXLq_HJp3lFc",
+    "plus_code":{
+      "compound_code":"V97F+R6 Paris, France",
+      "global_code":"8FW4V97F+R6"
+    },
+    "price_level":2,
+    "rating":4.4,
+    "reference":"ChIJr21RoPxt5kcRXLq_HJp3lFc",
+    "scope":"GOOGLE",
+    "types":[
+      "restaurant",
+      "bar",
+      "food",
+      "point_of_interest",
+      "establishment"
+  ],
+  "user_ratings_total":707,
+  "vicinity":"1 Rue Jacquard, Paris"
   }
 ]
 ```
