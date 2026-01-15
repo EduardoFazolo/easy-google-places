@@ -1,14 +1,18 @@
-import { Coordinate, PlaceResult } from "./types";
+import { Coordinate, MapsPlaceResult, PlaceResult } from "./types";
 
-export async function fetchPlaceFromApi(
+/**
+ * Fetches places using the Legacy Google Places API (Nearby Search).
+ * Matches the original behavior of this library.
+ */
+export async function fetchLegacyPlaces(
   location: Coordinate,
   radius: number,
   type: string,
   apiKey: string,
   onProgress?: (count: number) => void,
-  allowClosedStores: boolean = false,
-): Promise<PlaceResult[]> {
-  const allPlaces: PlaceResult[] = [];
+  allowClosedStores: boolean = false
+): Promise<MapsPlaceResult[]> {
+  const allPlaces: MapsPlaceResult[] = [];
   const maxPages = 3;
   
   const url = new URL(
@@ -32,7 +36,6 @@ export async function fetchPlaceFromApi(
     if (nextPageToken) {
       currentUrl.searchParams.append("pagetoken", nextPageToken);
       // Determine if we need to wait.
-      // Although the user snippet has a wait, let's keep it robust.
       // Google requires a short delay before the next_page_token becomes valid.
       await new Promise((resolve) => setTimeout(resolve, 2000));
     }
@@ -47,14 +50,13 @@ export async function fetchPlaceFromApi(
       }
 
       if (data.results) {
-        // console.log("\n\n\n", JSON.stringify(data.results))
-        let activePlaces: PlaceResult[] = [];
+        let activePlaces: MapsPlaceResult[] = [];
         if (!allowClosedStores) {
-          activePlaces = (data.results as PlaceResult[]).filter(
+          activePlaces = (data.results as MapsPlaceResult[]).filter(
             (place) => place.business_status !== "CLOSED_TEMPORARILY"
           );
         } else {
-          activePlaces = data.results as PlaceResult[];
+          activePlaces = data.results as MapsPlaceResult[];
         }
         
         allPlaces.push(...activePlaces);
@@ -71,5 +73,82 @@ export async function fetchPlaceFromApi(
     }
   }
 
+  return allPlaces;
+}
+
+/**
+ * Fetches places using the New Google Places API (v1).
+ * Allows specifying fields to retrieve.
+ */
+export async function fetchNewPlaces(
+  location: Coordinate,
+  radius: number,
+  type: string,
+  apiKey: string,
+  fields: string[],
+  onProgress?: (count: number) => void,
+  allowClosedStores: boolean = false
+): Promise<PlaceResult[]> {
+  const allPlaces: PlaceResult[] = [];
+  
+  const url = "https://places.googleapis.com/v1/places:searchNearby";
+
+  // Ensure fields are properly formatted (prefixed with 'places.')
+  const formattedFields = fields.map(f => f.startsWith("places.") ? f : `places.${f}`).join(",");
+  
+  // Implementation for single call:
+  const requestBody = {
+      locationRestriction: {
+        circle: {
+          center: {
+            latitude: location.latitude,
+            longitude: location.longitude,
+          },
+          radius: radius,
+        },
+      },
+      includedTypes: [type], 
+      maxResultCount: 20
+  };
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": apiKey,
+        "X-Goog-FieldMask": formattedFields,
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error("Google Places API error:", data.error?.message || data.error || data);
+      return [];
+    }
+
+    if (data.places) {
+       let activePlaces: PlaceResult[] = [];
+       // Filter closed stores if needed.
+       if (!allowClosedStores) {
+          activePlaces = (data.places as PlaceResult[]).filter(
+             (place) => place.businessStatus !== "CLOSED_TEMPORARILY" && place.businessStatus !== "CLOSED_PERMANENTLY"
+          );
+       } else {
+          activePlaces = data.places as PlaceResult[];
+       }
+
+       allPlaces.push(...activePlaces);
+
+       if (onProgress) {
+         onProgress(activePlaces.length);
+       }
+    }
+  } catch (error) {
+    console.error("Network error fetching places:", error);
+  }
+  
   return allPlaces;
 }

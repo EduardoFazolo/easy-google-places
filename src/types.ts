@@ -7,7 +7,9 @@ export interface Coordinate {
 }
 
 // Define simplified interface for the result based on the user's snippet
-export interface PlaceResult {
+// --- Legacy Maps API Types ---
+
+export interface MapsPlaceResult {
   business_status?: string;
   geometry?: {
     location?: {
@@ -71,4 +73,79 @@ export interface PlaceResult {
   website?: string;
   price_level?: number;
   timezone?: string;
+}
+
+// --- New Places API Types ---
+
+export interface PlaceResult {
+  name?: string; // Resource name: places/PLACE_ID
+  id?: string; // The Place ID
+  types?: string[];
+  nationalPhoneNumber?: string;
+  internationalPhoneNumber?: string;
+  formattedAddress?: string;
+  addressComponents?: Array<{
+    longText: string;
+    shortText: string;
+    types: string[];
+    languageCode: string;
+  }>;
+  plusCode?: {
+    globalCode: string;
+    compoundCode: string;
+  };
+  location?: {
+    latitude: number;
+    longitude: number;
+  };
+  viewport?: {
+    low: {
+      latitude: number;
+      longitude: number;
+    };
+    high: {
+      latitude: number;
+      longitude: number;
+    };
+  };
+  rating?: number;
+  googleMapsUri?: string;
+  websiteUri?: string;
+  regularOpeningHours?: {
+    openNow: boolean;
+    periods: Array<{
+      open: {
+        day: number;
+        hour: number;
+        minute: number;
+      };
+      close: {
+        day: number;
+        hour: number;
+        minute: number;
+      };
+    }>;
+    weekdayDescriptions: string[];
+  };
+  utcOffsetMinutes?: number;
+  userRatingCount?: number;
+  displayName?: {
+    text: string;
+    languageCode: string;
+  };
+  priceLevel?: string; 
+  photos?: Array<{
+    name: string;
+    widthPx: number;
+    heightPx: number;
+    authorAttributions: Array<{
+      displayName: string;
+      uri: string;
+      photoUri: string;
+    }>;
+  }>;
+  businessStatus?: string;
+  reservable?: boolean;
+  parkingOptions?: string[];
+  googleMapsLinks?: string[];
 }
