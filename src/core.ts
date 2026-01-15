@@ -180,6 +180,10 @@ export class PlaceQueryBuilder {
 
       // Small delay between batches to be polite to the API?
       await new Promise(r => setTimeout(r, 200)); 
+      // Wait 2 seconds every 20 batches
+      if(processedBatches % 20 === 0) {
+        await new Promise(r => setTimeout(r, 2000));
+      }
     }
 
     let uniquePlaces = Array.from(allPlacesMap.values());
