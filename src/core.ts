@@ -1,7 +1,7 @@
 import { generateSubCircles } from "./geometry";
 import { fetchLegacyPlaces, fetchNewPlaces } from "./api";
 import { writeFileSync } from "fs";
-import { Coordinate, MapsPlaceResult, PlaceResult } from "./types";
+import { Coordinate, MapsPlaceResult, NearbySearchAttributes, PlaceResult } from "./types";
 
 type OutputFormat = "csv" | "json" | ((places: MapsPlaceResult[]) => void);
 type NewOutputFormat = "csv" | "json" | ((places: PlaceResult[]) => void);
@@ -155,8 +155,8 @@ export class PlaceQueryBuilder {
       this._onFinished(places);
     } else if (this._onFinished === "json") {
       const jsonContent = JSON.stringify(places, null, 2);
-      writeFileSync("places_output.json", jsonContent);
-      if (this._showLogs) console.log("Saved results to places_output.json");
+      writeFileSync("maps_places_output.json", jsonContent);
+      if (this._showLogs) console.log("Saved results to maps_places_output.json");
     } else if (this._onFinished === "csv") {
         const headers = ["name", "address", "rating", "user_ratings_total", "place_id", "lat", "lng"];
         const csvContent = [
@@ -173,8 +173,8 @@ export class PlaceQueryBuilder {
                 ].join(",")
             })
         ].join("\n");
-        writeFileSync("places_output.csv", csvContent);
-        if (this._showLogs) console.log("Saved results to places_output.csv");
+        writeFileSync("maps_places_output.csv", csvContent);
+        if (this._showLogs) console.log("Saved results to maps_places_output.csv");
     }
   }
 }
@@ -189,7 +189,7 @@ export class NewPlaceQueryBuilder {
   private _minRate: number = 4.1;
   private _limitCount: number | undefined;
   private _type: string = "restaurant";
-  private _fields: string[] = ["name", "id", "formattedAddress", "rating", "location", "displayName"]; // Defaults
+  private _fields: NearbySearchAttributes[] = ["name", "displayName", "id", "formattedAddress", "rating", "location"]; // Defaults
   private _onFinished?: NewOutputFormat;
   private _showLogs: boolean = false;
   private _showProgress: boolean = false;
@@ -230,8 +230,8 @@ export class NewPlaceQueryBuilder {
    * Specifies fields to return from the New Places API.
    * e.g. ["displayName", "rating", "formattedAddress"]
    */
-  public fields(fields: string[]): this {
-    this._fields = fields;
+  public fields(fields: NearbySearchAttributes[]): this {
+    this._fields = [...this._fields, ...fields];
     return this;
   }
 
@@ -331,8 +331,8 @@ export class NewPlaceQueryBuilder {
        this._onFinished(places);
     } else if (this._onFinished === "json") {
        const jsonContent = JSON.stringify(places, null, 2);
-       writeFileSync("places_output_new.json", jsonContent);
-       if (this._showLogs) console.log("Saved results to places_output_new.json");
+       writeFileSync("places_output.json", jsonContent);
+       if (this._showLogs) console.log("Saved results to places_output.json");
     } else if (this._onFinished === "csv") {
         const headers = ["id", "rating", "formattedAddress", "displayName"];
         const csvContent = [
@@ -346,8 +346,8 @@ export class NewPlaceQueryBuilder {
                 ].join(",")
             })
         ].join("\n");
-        writeFileSync("places_output_new.csv", csvContent);
-        if (this._showLogs) console.log("Saved results to places_output_new.csv");
+        writeFileSync("places_output.csv", csvContent);
+        if (this._showLogs) console.log("Saved results to places_output.csv");
     }
   }
 }
