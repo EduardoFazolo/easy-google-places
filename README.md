@@ -13,17 +13,17 @@ A TypeScript library to query Google Places API with automatic area subdivision 
 ## Installation
 
 ```bash
-npm install easy-google-restaurants
+npm install easy-google-places
 # or
-bun add easy-google-restaurants
+bun add easy-google-places
 # or
-yarn add easy-google-restaurants
+yarn add easy-google-places
 ```
 
 ## Basic Usage
 
 ```typescript
-import { getGooglePlaces } from "easy-google-restaurants";
+import { getGooglePlaces } from "easy-google-places";
 
 // Coordinates for the center of your search (e.g., Paris)
 const location = { latitude: 48.8566, longitude: 2.3522 };

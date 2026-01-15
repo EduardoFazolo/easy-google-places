@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "easy-google-restaurants",
+      "name": "easy-google-places",
       "devDependencies": {
         "@types/bun": "^1.3.6",
       },
