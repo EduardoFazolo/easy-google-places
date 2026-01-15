@@ -36,6 +36,17 @@ await getGooglePlaces(location)
   .showProgress() // Show progress per batch
   .onFinished("json") // Save results to places_output.json
   .run();
+
+// or, if you want to extract the results to a variable
+const places: PlaceResult[] =[]
+await getGooglePlaces(location)
+  .radius(2000)
+  .placesType("restaurant")
+  .apiKey("YOUR_GOOGLE_MAPS_API_KEY")
+  .showLogs()
+  .showProgress()
+  .onFinished((p) => places.push(...p))
+  .run();
 ```
 
 ## Including Temporarily Closed Stores
