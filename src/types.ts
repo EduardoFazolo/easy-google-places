@@ -88,6 +88,8 @@ export interface PlaceResult {
   nationalPhoneNumber?: string;
   internationalPhoneNumber?: string;
   formattedAddress?: string;
+  primaryType?: string;
+  primaryTypeDisplayName?: string;
   addressComponents?: Array<{
     longText: string;
     shortText: string;
@@ -147,7 +149,6 @@ export interface PlaceResult {
   businessStatus?: string;
   reservable?: boolean;
   parkingOptions?: string[];
-  googleMapsLinks?: string[];
 }
 
 
