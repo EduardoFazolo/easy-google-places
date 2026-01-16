@@ -1,6 +1,6 @@
 {
   "name": "easy-google-places",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Query Google Places API with automatic area subdivision to maximize results.",
   "main": "dist/index.js",
   "module": "dist/index.js",
