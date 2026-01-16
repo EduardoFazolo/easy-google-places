@@ -87,7 +87,8 @@ export async function fetchNewPlaces(
   apiKey: string,
   fields: string[],
   onProgress?: (count: number) => void,
-  allowClosedStores: boolean = false
+  allowClosedStores: boolean = false,
+  excludedPrimaryTypes: string[] = []
 ): Promise<PlaceResult[]> {
   const allPlaces: PlaceResult[] = [];
   
@@ -97,7 +98,7 @@ export async function fetchNewPlaces(
   const formattedFields = fields.map(f => f.startsWith("places.") ? f : `places.${f}`).join(",");
   
   // Implementation for single call:
-  const requestBody = {
+  const requestBody: any = {
       locationRestriction: {
         circle: {
           center: {
@@ -107,9 +108,13 @@ export async function fetchNewPlaces(
           radius: radius,
         },
       },
-      includedTypes: [type], 
+      includedTypes: [type],
       maxResultCount: 20
   };
+
+  if (excludedPrimaryTypes.length > 0) {
+    requestBody.excludedPrimaryTypes = excludedPrimaryTypes;
+  }
 
   try {
     const response = await fetch(url, {

@@ -20,7 +20,9 @@ export class PlaceQueryBuilder {
   private _showLogs: boolean = false;
   private _showProgress: boolean = false;
   private _apiKey: string | undefined;
+
   private _forceQueryClosedStores: boolean = false;
+  private _excludedPrimaryTypes: string[] = [];
 
   constructor(location: Coordinate) {
     this._location = location;
@@ -70,6 +72,11 @@ export class PlaceQueryBuilder {
 
   public allowClosedStores(): this {
     this._forceQueryClosedStores = true;
+    return this;
+  }
+
+  public excludedPrimaryTypes(types: string[]): this {
+    this._excludedPrimaryTypes = types;
     return this;
   }
 
@@ -141,6 +148,17 @@ export class PlaceQueryBuilder {
     // Filter by minRate
     uniquePlaces = uniquePlaces.filter(p => (p.rating || 0) >= this._minRate);
 
+    // Filter by excludedPrimaryTypes (Client-side for Legacy API)
+    if (this._excludedPrimaryTypes.length > 0) {
+      uniquePlaces = uniquePlaces.filter(p => {
+        if (!p.types) return true;
+        // If any of the place's types are in the excluded list, filter it out.
+        // Legacy API types are an array of strings.
+        return !p.types.some(t => this._excludedPrimaryTypes.includes(t));
+      });
+      if (this._showLogs) console.log(`Filtered out places based on excluded types: ${this._excludedPrimaryTypes.join(", ")}`);
+    }
+
     // Apply limit
     if (this._limitCount && uniquePlaces.length > this._limitCount) {
       uniquePlaces = uniquePlaces.slice(0, this._limitCount);
@@ -194,7 +212,9 @@ export class NewPlaceQueryBuilder {
   private _showLogs: boolean = false;
   private _showProgress: boolean = false;
   private _apiKey: string | undefined;
+
   private _forceQueryClosedStores: boolean = false;
+  private _excludedPrimaryTypes: string[] = [];
 
   constructor(location: Coordinate) {
     this._location = location;
@@ -255,6 +275,18 @@ export class NewPlaceQueryBuilder {
     return this;
   }
 
+  /**
+   * Some of the types includes `chinese_restaurant`, `japanese_restaurant`, `italian_restaurant`, etc.
+   * 
+   * You can see the types [here](https://developers.google.com/maps/documentation/places/web-service/place-types#table-a)
+   * @param types 
+   * @returns 
+   */
+  public excludedPrimaryTypes(types: string[]): this {
+    this._excludedPrimaryTypes = types;
+    return this;
+  }
+
   public async run(): Promise<void> {
     if (!this._apiKey) {
       throw new Error("API Key is required.");
@@ -293,7 +325,8 @@ export class NewPlaceQueryBuilder {
         this._apiKey,
         this._fields,
         (count) => {},
-        this._forceQueryClosedStores
+        this._forceQueryClosedStores,
+        this._excludedPrimaryTypes
       );
 
       for (const place of places) {
