@@ -352,7 +352,7 @@ export class NewPlaceQueryBuilder {
   }
 }
 
-export function getGoogleMapsPlaces(location: Coordinate) {
+export function getLegacyGooglePlaces(location: Coordinate) {
   return new PlaceQueryBuilder(location);
 }
 
