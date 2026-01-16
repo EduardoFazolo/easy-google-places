@@ -1,5 +1,5 @@
 import { describe, expect, test, mock, beforeEach, afterEach } from "bun:test";
-import { getGooglePlaces } from "../src/index";
+import { getLegacyGooglePlaces } from "../src/index";
 
 describe("PlaceQueryBuilder Integration", () => {
   const originalFetch = global.fetch;
@@ -31,7 +31,7 @@ describe("PlaceQueryBuilder Integration", () => {
 
     let finishedResults: any[] = [];
     
-    await getGooglePlaces({ latitude: 10, longitude: 10 })
+    await getLegacyGooglePlaces({ latitude: 10, longitude: 10 })
       .radius(1000)
       .apiKey("MOCK_KEY")
       .onFinished((results) => {
@@ -47,7 +47,7 @@ describe("PlaceQueryBuilder Integration", () => {
   });
 
   test("throws error if API key missing", async () => {
-    const builder = getGooglePlaces({ latitude: 0, longitude: 0 })
+    const builder = getLegacyGooglePlaces({ latitude: 0, longitude: 0 })
         .onFinished("json"); // No API key set
     
     // We intentionally don't set env var here (assuming it's not set in test env, or we can clear it)
