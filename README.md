@@ -1,4 +1,4 @@
-# Easy Google Restaurants
+# Easy Google Places
 
 A TypeScript library to query Google Places API with automatic area subdivision used to bypass result limits.
 

@@ -207,7 +207,7 @@ export class NewPlaceQueryBuilder {
   private _minRate: number = 4.1;
   private _limitCount: number | undefined;
   private _type: string = "restaurant";
-  private _fields: NearbySearchAttributes[] = ["name", "displayName", "id", "formattedAddress", "rating", "location", "nationalPhoneNumber", "internationalPhoneNumber", "websiteUri", "googleMapsUri", "regularOpeningHours", "reservable", "parkingOptions",  "priceLevel", "businessStatus", "accessibilityOptions", "utcOffsetMinutes", "userRatingCount", "types", "primaryType", "primaryTypeDisplayName"]; // Defaults
+  private _fields: NearbySearchAttributes[] = ["name", "displayName", "id", "formattedAddress", "rating", "location", "nationalPhoneNumber", "internationalPhoneNumber", "websiteUri", "googleMapsUri", "regularOpeningHours", "reservable", "parkingOptions",  "priceLevel", "businessStatus", "utcOffsetMinutes", "userRatingCount", "types", "primaryType", "primaryTypeDisplayName"]; // Defaults
   private _onFinished?: NewOutputFormat;
   private _showLogs: boolean = false;
   private _showProgress: boolean = false;
