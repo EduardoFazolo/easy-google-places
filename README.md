@@ -34,7 +34,7 @@ const location = { latitude: 48.8566, longitude: 2.3522 };
 
 await getGooglePlaces(location)
   .radius(2000) // Search within 2km radius
-  .placesType("restaurant") 
+  .placesTypes(["restaurant"]) 
   .fields(["displayName", "rating", "formattedAddress", "id"]) // Specify fields!
   .apiKey("YOUR_GOOGLE_MAPS_API_KEY") 
   .showLogs() 
@@ -57,7 +57,7 @@ const location = { latitude: 48.8566, longitude: 2.3522 };
 
 await getLegacyGooglePlaces(location)
   .radius(2000)
-  .placesType("restaurant")
+  .placesTypes(["restaurant"])
   .apiKey("YOUR_GOOGLE_MAPS_API_KEY")
   .showLogs()
   .onFinished((places) => {

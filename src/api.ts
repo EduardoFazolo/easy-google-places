@@ -7,7 +7,7 @@ import { Coordinate, MapsPlaceResult, PlaceResult } from "./types";
 export async function fetchLegacyPlaces(
   location: Coordinate,
   radius: number,
-  type: string,
+  types: string[],
   apiKey: string,
   onProgress?: (count: number) => void,
   allowClosedStores: boolean = false
@@ -20,7 +20,9 @@ export async function fetchLegacyPlaces(
   );
   url.searchParams.append("location", `${location.latitude},${location.longitude}`);
   url.searchParams.append("radius", radius.toString());
-  url.searchParams.append("type", type);
+  for (const type of types) {
+    url.searchParams.append("type", type);
+  }
   // Important: Google Places API does not support explicit pagination by page number,
   // only by next_page_token.
   url.searchParams.append("key", apiKey);
@@ -83,7 +85,7 @@ export async function fetchLegacyPlaces(
 export async function fetchNewPlaces(
   location: Coordinate,
   radius: number,
-  type: string,
+  types: string[],
   apiKey: string,
   fields: string[],
   onProgress?: (count: number) => void,
@@ -108,7 +110,7 @@ export async function fetchNewPlaces(
           radius: radius,
         },
       },
-      includedTypes: [type],
+      includedTypes: types,
       maxResultCount: 20
   };
 

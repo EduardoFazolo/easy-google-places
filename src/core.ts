@@ -15,7 +15,12 @@ export class PlaceQueryBuilder {
   private _subRadius: number = 500; // Default 500m
   private _minRate: number = 4.1;
   private _limitCount: number | undefined;
-  private _type: string = "restaurant";
+   /**
+   * The types of places to search for.
+   * See [the API documentation](https://developers.google.com/maps/documentation/places/web-service/place-types#table-a)
+   * @example ["bar", "pub", "restaurant", "cafe"]
+   */
+  private _types: string[] = [];
   private _onFinished?: OutputFormat;
   private _showLogs: boolean = false;
   private _showProgress: boolean = false;
@@ -30,8 +35,8 @@ export class PlaceQueryBuilder {
     this._apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
   }
 
-  public placesType(type: string): this {
-    this._type = type;
+  public placesTypes(types: string[]): this {
+    this._types = types;
     return this;
   }
 
@@ -118,7 +123,7 @@ export class PlaceQueryBuilder {
       const places = await fetchLegacyPlaces(
         circle, 
         this._subRadius, 
-        this._type, 
+        this._types, 
         this._apiKey,
         (count) => {},
         this._forceQueryClosedStores
@@ -206,7 +211,12 @@ export class NewPlaceQueryBuilder {
   private _subRadius: number = 500; 
   private _minRate: number = 4.1;
   private _limitCount: number | undefined;
-  private _type: string = "restaurant";
+  /**
+   * The types of places to search for.
+   * See [the API documentation](https://developers.google.com/maps/documentation/places/web-service/place-types#table-a)
+   * @example ["bar", "pub", "restaurant", "cafe"]
+   */
+  private _types: string[] = [];
   private _fields: NearbySearchAttributes[] = ["name", "displayName", "id", "formattedAddress", "rating", "location", "nationalPhoneNumber", "internationalPhoneNumber", "websiteUri", "googleMapsUri", "regularOpeningHours", "reservable", "parkingOptions",  "priceLevel", "businessStatus", "utcOffsetMinutes", "userRatingCount", "types", "primaryType", "primaryTypeDisplayName"]; // Defaults
   private _onFinished?: NewOutputFormat;
   private _showLogs: boolean = false;
@@ -221,8 +231,8 @@ export class NewPlaceQueryBuilder {
     this._apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
   }
 
-  public placesType(type: string): this {
-    this._type = type;
+  public placesTypes(types: string[]): this {
+    this._types = types;
     return this;
   }
 
@@ -321,7 +331,7 @@ export class NewPlaceQueryBuilder {
       const places = await fetchNewPlaces(
         circle, 
         this._subRadius, 
-        this._type, 
+        this._types,
         this._apiKey,
         this._fields,
         (count) => {},
